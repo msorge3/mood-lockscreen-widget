@@ -94,6 +94,11 @@ struct QuickLogView: View {
         justLogged = true
 
         todayCount = store.entries(on: Date()).count
+
+        // Compute fresh streak and write shared state for the widget
+        let current = store.currentStreak()
+        SharedMoodState.save(level: level, streak: current)
+
         showBanner = true
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -104,7 +109,7 @@ struct QuickLogView: View {
             showBanner = false
         }
     }
-}
+
 
 private struct LoggedBanner: View {
     let streak: Int
