@@ -61,4 +61,9 @@ class MoodStore {
 
         return streak
     }
+
+    /// Whether there is at least one entry on the given calendar day.
+    func hasEntries(on day: Date, calendar: Calendar = .current) -> Bool {
+        !entries(on: day, calendar: calendar).isEmpty
+    }
 }
