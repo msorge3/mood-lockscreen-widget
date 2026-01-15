@@ -1,16 +1,29 @@
 import SwiftUI
 
 struct HistoryView: View {
+    @Environment(MoodStore.self) private var store
+
     var body: some View {
         NavigationStack {
-            Text("History")
-                .font(.title2)
-                .padding()
-                .navigationTitle("Calendar")
+            VStack(spacing: 12) {
+                Text("History")
+                    .font(.title2)
+
+                Text("Today’s entries: \(store.entries(on: Date()).count)")
+                    .font(.subheadline)
+
+                Text("Total entries: \(store.entries.count)")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+            .navigationTitle("Calendar")
         }
     }
 }
 
 #Preview {
-    HistoryView()
+    let store = MoodStore()
+    return HistoryView()
+        .environment(store)
 }
