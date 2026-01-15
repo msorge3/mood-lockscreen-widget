@@ -32,4 +32,33 @@ class MoodStore {
         return MoodLevel(rawValue: avgRaw)
             ?? dayEntries.last?.level
     }
+
+    /// Current streak in days: consecutive days ending today with at least one entry.
+    func currentStreak(calendar: Calendar = .current) -> Int {
+        let today = calendar.startOfDay(for: Date())
+
+        // If no entries today, streak is 0.
+        guard !entries(on: today, calendar: calendar).isEmpty else {
+            return 0
+        }
+
+        var streak = 0
+        var cursor = today
+
+        while true {
+            let dayEntries = entries(on: cursor, calendar: calendar)
+            if dayEntries.isEmpty {
+                break
+            }
+            streak += 1
+
+            // Move one day back.
+            guard let previousDay = calendar.date(byAdding: .day, value: -1, to: cursor) else {
+                break
+            }
+            cursor = previousDay
+        }
+
+        return streak
+    }
 }
