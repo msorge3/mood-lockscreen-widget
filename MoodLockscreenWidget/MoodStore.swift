@@ -16,7 +16,7 @@ class MoodStore {
         }
     }
 
-    /// Average mood level for a given day, if any entries exist.
+    /// Average mood level for a given day, rounded to the closest emoji, if any entries exist.
     func representativeLevel(for day: Date, calendar: Calendar = .current) -> MoodLevel? {
         let dayEntries = entries(on: day, calendar: calendar)
         guard !dayEntries.isEmpty else { return nil }
@@ -24,10 +24,12 @@ class MoodStore {
         let sum = dayEntries
             .map { $0.level.rawValue }
             .reduce(0, +)
-        let avgRaw = Int((Double(sum) / Double(dayEntries.count)).rounded())
 
-        // Round to nearest MoodLevel
+        let avgDouble = Double(sum) / Double(dayEntries.count)
+        let avgRaw = Int(avgDouble.rounded())
+
+        // Rounded to nearest mood level, or fall back to last entry of the day
         return MoodLevel(rawValue: avgRaw)
-            ?? dayEntries.last?.level // fallback to last of the day if something goes weird
+            ?? dayEntries.last?.level
     }
 }

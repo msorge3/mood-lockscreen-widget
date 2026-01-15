@@ -59,11 +59,16 @@ struct HistoryView: View {
 
                     // Actual days
                     ForEach(daysInMonth, id: \.self) { day in
-                        DayCell(
-                            date: day,
-                            emoji: store.representativeLevel(for: day, calendar: calendar)?.emoji,
-                            isToday: calendar.isDateInToday(day)
-                        )
+                        NavigationLink {
+                            DayDetailView(date: day)
+                        } label: {
+                            DayCell(
+                                date: day,
+                                emoji: store.representativeLevel(for: day, calendar: calendar)?.emoji,
+                                isToday: calendar.isDateInToday(day)
+                            )
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
 
